@@ -33,11 +33,26 @@ Office
 * install docker 
 Depending on your Virtual Server Operating system install docker on your VPS
 https://docs.docker.com/install/linux/docker-ce/ubuntu/
-
 https://docs.docker.com/install/linux/docker-ce/centos/
 
 
 * install vpn2office container,
+mkdir -p /gluster/docker0/pritunl/{mongodb,pritunl}
+touch gluster/docker0/pritunl/pritunl.conf
 
-docker pull scolak/vpn2office
+docker run \
+    --name=vpn2office \
+    --detach \
+    --privileged \
+    --network=host \
+    --restart=always \
+    -v /gluster/docker0/pritunl/mongodb:/var/lib/mongodb \
+    -v /gluster/docker0/pritunl/pritunl:/var/lib/pritunl \
+    -v /gluster/docker0/pritunl/pritunl.conf:/etc/pritunl.conf \
+    scolak/vpn2office
+
+Then you can login to your pritunl web ui at https://docker-host-address
+
+Username: pritunl Password: pritunl
+
 
