@@ -22,3 +22,22 @@ Office
  
 
 ![vpn2office](https://github.com/nsrvs/vpn2office/blob/master/vpn2office.png)
+
+
+
+1. Buy HW (Miktorik/Raspberry-pi)
+
+
+2. Cloud Virtual Server installation
+
+* install docker 
+Depending on your Virtual Server Operating system install docker on your VPS
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+https://docs.docker.com/install/linux/docker-ce/centos/
+
+
+* install vpn2office container,
+
+docker pull scolak/vpn2office
+
