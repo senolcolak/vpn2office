@@ -1,17 +1,30 @@
 #Download base image ubuntu 16.04
 FROM ubuntu:18.04
 # Update Ubuntu Software repository
-RUN apt-get update
-# install Pritunl Openvpn
-RUN echo "deb http://repo.pritunl.com/stable/apt bionic main" | sudo tee /etc/apt/sources.list.d/pritunl.list
-RUN echo "deb https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse
-" >/etc/apt/sources.list.d/mongodb-org-4.0.list
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 7568D9BB55FF9E5287D586017AE645C0CF8E292A
-RUN apt update
-RUN apt --assume-yes install pritunl mongodb-server
 
+ARG PRITUNL_VERSION="*"
+ENV PRITUNL_VERSION=${PRITUNL_VERSION}
 
-##install l2tp vpn
-RUN apt install -y wget
-RUN wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+ARG MONGODB_VERSION="*"
+ENV MONGODB_VERSION=${MONGODB_VERSION}
+
+LABEL MAINTAINER="Senol Colak <senol@nucleuss.com>"
+
+COPY --chown=root:root ["docker-install.sh", "/root"]
+COPY --chown=root:root ["l2tp-install.sh","/root"]
+RUN bash /root/docker-install.sh
+RUN bash /root/l2tp-install.sh
+
+ADD start-pritunl /bin/start-pritunl
+
+EXPOSE 80
+EXPOSE 443
+EXPOSE 1194
+EXPOSE 1194/udp
+EXPOSE 1701
+EXPOSE 4500
+EXPOSE 500
+
+ENTRYPOINT ["/bin/start-pritunl"]
+
+CMD ["/usr/bin/tail", "-f","/var/log/pritunl.log"]
