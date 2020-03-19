@@ -37,6 +37,8 @@ https://docs.docker.com/install/linux/docker-ce/centos/
 
 
 * install vpn2office container,
+
+
 mkdir -p /gluster/docker0/pritunl/{mongodb,pritunl}
 touch gluster/docker0/pritunl/pritunl.conf
 
