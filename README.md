@@ -38,23 +38,24 @@ https://docs.docker.com/install/linux/docker-ce/centos/
 
 * install vpn2office container,
 
-'''
-mkdir -p /gluster/docker0/pritunl/{mongodb,pritunl}
-touch gluster/docker0/pritunl/pritunl.conf
-'''
+first Create the directories
+```
+mkdir -p /srv/docker0/pritunl/{mongodb,pritunl}
+touch /srv/docker0/pritunl/pritunl.conf
+```
 
-'''
+```
 docker run \
     --name=vpn2office \
     --detach \
     --privileged \
     --network=host \
     --restart=always \
-    -v /gluster/docker0/pritunl/mongodb:/var/lib/mongodb \
-    -v /gluster/docker0/pritunl/pritunl:/var/lib/pritunl \
-    -v /gluster/docker0/pritunl/pritunl.conf:/etc/pritunl.conf \
+    -v /srv/docker0/pritunl/mongodb:/var/lib/mongodb \
+    -v /srv/docker0/pritunl/pritunl:/var/lib/pritunl \
+    -v /srv/docker0/pritunl/pritunl.conf:/etc/pritunl.conf \
     scolak/vpn2office
-'''
+```
 
 Then you can login to your pritunl web ui at https://docker-host-address
 
