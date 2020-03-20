@@ -32,7 +32,9 @@ Office
 
 * install docker 
 Depending on your Virtual Server Operating system install docker on your VPS
+
 https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
 https://docs.docker.com/install/linux/docker-ce/centos/
 
 
@@ -41,7 +43,6 @@ https://docs.docker.com/install/linux/docker-ce/centos/
 first Create the directories
 ```
 mkdir -p /srv/docker0/pritunl/{mongodb,pritunl}
-touch /srv/docker0/pritunl/pritunl.conf
 ```
 
 ```
