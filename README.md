@@ -40,26 +40,60 @@ https://docs.docker.com/install/linux/docker-ce/centos/
 
 * install vpn2office container,
 
-first Create the directories
 ```
-mkdir -p /srv/docker0/pritunl/{mongodb,pritunl}
+$ sudo modprobe ip_tables
+
+$ sudo mkdir -p /srv/docker0/pritunl/{mongodb,pritunl}
+
+$ sudo docker run 
+--name=vpn2office 
+--detach 
+--privileged 
+--network=host 
+--restart=always 
+-v /srv/docker0/pritunl/mongodb:/var/lib/mongodb 
+-v /srv/docker0/pritunl/pritunl:/var/lib/pritunl 
+scolak/vpn2office
 ```
+from the command line type the following commands to set l2tp VPN username and password
 
-```
-docker run \
-    --name=vpn2office \
-    --detach \
-    --privileged \
-    --network=host \
-    --restart=always \
-    -v /srv/docker0/pritunl/mongodb:/var/lib/mongodb \
-    -v /srv/docker0/pritunl/pritunl:/var/lib/pritunl \
-    -v /srv/docker0/pritunl/pritunl.conf:/etc/pritunl.conf \
-    scolak/vpn2office
-```
+$ docker exec -it vpn2office /setpw_vpnuser.sh
 
-Then you can login to your pritunl web ui at https://docker-host-address
+[answer yes to update the password]
 
-Username: pritunl Password: pritunl
+$ sudo docker exec -it vpn2office cat /etc/ipsec.secrets
 
+%any %any : PSK "PM9j49s3taR5WtVgbhbX"
+
+[here shared key is PM9j49s3taR5WtVgbhbX ]
+
+you need three parameter to connect l2tp vpn
+
+username: vpnuser
+
+password: you-just-set
+
+shared-key: PM9j49s3taR5WtVgbhbX <-- this is different on your image
+
+$ sudo docker exec -it vpn2office ip r add via 192.168.42.10 dev ppp0
+
+here if your office network is 192.168.0.0/24 (ie. if you have a ip 192.168.0.183 and net mask 255.255.255.0) that will look like the following
+
+$ sudo docker exec -it vpn2office ip r add 192.168.0.0/24 via 192.168.42.10 dev ppp0
+
+Plus you have VPN connection for your Employees/Clients/Users to reach office network
+
+from web type the url https://docker-host-name-or-ip username password pritunl/pritunl (please change immediately)
+
+pritunl is great for openvpn installations, just give a password and start creating the following Organization -> any name will work like office user -> add as many users as you want server -> create a server any with udp port (i.e. 40099) attach server to organization office start remove the 0/0 route from the route list add route 192.168.0.0/24 (your office network)
+
+This is the end of server part.
+
+each user has a key, plus if you wan you can enable 2 factor auth, for your Employees/Users.
+
+download the key and install a openvpn client, all of the clients will work..
+
+3. Office Client installation
+
+to-be-done..
 
