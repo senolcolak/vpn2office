@@ -57,7 +57,7 @@ scolak/vpn2office
 ```
 from the command line type the following commands to set l2tp VPN username and password
 
-$ docker exec -it vpn2office /setpw_vpnuser.sh
+$ sudo docker exec -it vpn2office sh setpw_vpnuser.sh <NEW-PASSWORD>
 
 [answer yes to update the password]
 
