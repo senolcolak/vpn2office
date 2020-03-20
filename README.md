@@ -45,15 +45,15 @@ $ sudo modprobe ip_tables
 
 $ sudo mkdir -p /srv/docker0/pritunl/{mongodb,pritunl}
 
-$ sudo docker run 
---name=vpn2office 
---detach 
---privileged 
---network=host 
---restart=always 
--v /srv/docker0/pritunl/mongodb:/var/lib/mongodb 
--v /srv/docker0/pritunl/pritunl:/var/lib/pritunl 
-scolak/vpn2office
+$ sudo docker run \
+--name=vpn2office \
+--detach \
+--privileged \
+--network=host \
+--restart=always \
+-v /srv/docker0/pritunl/mongodb:/var/lib/mongodb \
+-v /srv/docker0/pritunl/pritunl:/var/lib/pritunl \
+scolak/vpn2office 
 ```
 from the command line type the following commands to set l2tp VPN username and password
 
