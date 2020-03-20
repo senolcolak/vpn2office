@@ -1,0 +1,32 @@
+#!/bin/sh
+set -e
+##don't forget to run the container in privileged mode or net_admin privileges, you need to create tun device
+[ -d /dev/net ] ||
+    mkdir -p /dev/net
+[ -c /dev/net/tun ] ||
+    mknod /dev/net/tun c 10 200
+
+
+touch /var/log/pritunl.log
+touch /var/run/pritunl.pid
+/bin/rm /var/run/pritunl.pid
+
+if [ "$1" = "bash" ]; then
+    exec "$@"
+    exit $?
+fi
+
+##ipsec l2tp vpn
+mkdir -p /run/pluto /var/run/pluto /var/run/xl2tpd
+rm -f /run/pluto/pluto.pid /var/run/pluto/pluto.pid /var/run/xl2tpd.pid
+
+/usr/local/sbin/ipsec start &
+/usr/sbin/xl2tpd -D -c /etc/xl2tpd/xl2tpd.conf &
+
+
+##start mongodb
+/usr/bin/mongod -f /etc/mongodb.conf &
+### wait for 3 second
+/bin/sleep 3
+##start pritunl OPENVPN server
+exec /usr/bin/pritunl start -c /root/pritunl.conf

@@ -4,11 +4,16 @@ apt-get update -q
 apt-get install -y locales iptables wget gnupg2 python net-tools bridge-utils openvpn
 
 ###install l2tp vpn
-wget https://git.io/vpnsetup -O vpnsetup.sh 
+wget -O add_vpn_user.sh https://raw.githubusercontent.com/hwdsl2/setup-ipsec-vpn/master/extras/add_vpn_user.sh
+wget -O del_vpn_user.sh https://raw.githubusercontent.com/hwdsl2/setup-ipsec-vpn/master/extras/del_vpn_user.sh
+wget -O update_vpn_users.sh https://raw.githubusercontent.com/hwdsl2/setup-ipsec-vpn/master/extras/update_vpn_users.sh
+
+wget https://git.io/vpnsetup -O vpnsetup.sh
 sh vpnsetup.sh
 
 
-##install pritunl
+
+##install pritunl and mongodb
 echo "deb https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" > /etc/apt/sources.list.d/mongodb-org-4.0.list
 apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 

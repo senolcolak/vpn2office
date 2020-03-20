@@ -10,21 +10,19 @@ ENV MONGODB_VERSION=${MONGODB_VERSION}
 
 LABEL MAINTAINER="Senol Colak <senol@nucleuss.com>"
 
-COPY --chown=root:root ["docker-install.sh", "/root"]
-COPY --chown=root:root ["l2tp-install.sh","/root"]
-RUN bash /root/docker-install.sh
-RUN bash /root/l2tp-install.sh
+COPY --chown=root:root ["dockerize.sh","/root"]
+COPY --chown=root:root ["pritunl.conf","/root"]
 
-ADD start-pritunl /bin/start-pritunl
+
+RUN bash /root/dockerize.sh
+
+ADD start-vpn2office-pritunl /bin/start-vpn2office-pritunl
 
 EXPOSE 80
 EXPOSE 443
 EXPOSE 1194
 EXPOSE 1194/udp
-EXPOSE 1701
-EXPOSE 4500
-EXPOSE 500
 
-ENTRYPOINT ["/bin/start-pritunl"]
+ENTRYPOINT ["/bin/start-vpn2office-pritunl"]
 
 CMD ["/usr/bin/tail", "-f","/var/log/pritunl.log"]
